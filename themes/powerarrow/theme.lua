@@ -78,7 +78,7 @@ theme.widget_task                               = theme.dir .. "/icons/task.png"
 theme.widget_scissors                           = theme.dir .. "/icons/scissors.png"
 theme.tasklist_plain_task_name                  = true
 theme.tasklist_disable_icon                     = true
-theme.useless_gap                               = 0
+theme.useless_gap                               = 5
 theme.titlebar_close_button_focus               = theme.dir .. "/icons/titlebar/close_focus.png"
 theme.titlebar_close_button_normal              = theme.dir .. "/icons/titlebar/close_normal.png"
 theme.titlebar_ontop_button_focus_active        = theme.dir .. "/icons/titlebar/ontop_focus_active.png"
@@ -108,6 +108,15 @@ local binclock = require("themes.powerarrow.binclock"){
     color_active = theme.fg_normal,
     color_inactive = theme.bg_focus
 }
+
+-- Textclock
+local clockicon = wibox.widget.imagebox(theme.widget_clock)
+local clock = awful.widget.watch(
+    "date +'%a %d %b %R'", 60,
+    function(widget, stdout)
+        widget:set_markup(" " .. markup.font(theme.font, stdout))
+    end
+)
 
 -- Calendar
 theme.cal = lain.widget.cal({
@@ -389,7 +398,8 @@ function theme.at_screen_connect(s)
             arrow("#8DAA9A", "#C0C0A2"),
             wibox.container.background(wibox.container.margin(wibox.widget { nil, neticon, net.widget, layout = wibox.layout.align.horizontal }, dpi(3), dpi(3)), "#C0C0A2"),
             arrow("#C0C0A2", "#777E76"),
-            wibox.container.background(wibox.container.margin(binclock.widget, dpi(4), dpi(8)), "#777E76"),
+            --wibox.container.background(wibox.container.margin(binclock.widget, dpi(4), dpi(8)), "#777E76"),
+            wibox.container.background(wibox.container.margin(clock, dpi(4), dpi(8)), "#777E76"),
             arrow("#777E76", "alpha"),
             --]]
             s.mylayoutbox,
